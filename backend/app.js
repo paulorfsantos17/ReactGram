@@ -12,8 +12,13 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
-//routes
+//cors
+app.use(cors({credentials:true, origin:"http://localhost:3000"}))
 
+//upload directory
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")))
+
+//routes
 const router =require("./routers/Router")
 
 app.use(router)
