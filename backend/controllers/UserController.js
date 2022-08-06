@@ -43,6 +43,36 @@ const register = async(req, res) => {
   })
 }
 
+const login = async(req, res) => {
+  const {email, password} = req.body
+
+  const user = await User.findOne({email})
+
+  if(!user) {
+    res.status(404).json({errors: ["Usuário não encontrado."]})
+    return
+  }
+
+if(!(await bcrypt.compare(password, user.password))) {
+  res.status(422).json({errors: ["Senha está incorreta."]})
+  return
+}
+
+res.status(201).json({
+  _id: user._id,
+  profileImage: user.profileImage,
+  token: generateToken( user._id)
+})
+}
+
+
+const getCurrentUser = async (req, res) => {
+  const user = req.user
+  res.status(200).json(user)
+}
+
 module.exports = {
-  register
+  register,
+  login,
+  getCurrentUser
 }
