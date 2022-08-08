@@ -110,7 +110,12 @@ const update = async (req, res) => {
 const getUserById = async(req, res) => {
   const {id} = req.params
 
-  const user = await User.findById(mongoose.Types.ObjectId(id)).select('-password')
+  try {
+    const user = await User.findById(mongoose.Types.ObjectId(id)).select('-password')
+  } catch(error) {
+    res.status(404).json({errors: ["Usuário Não encontrador"]})
+    return
+  }
 
   if(!user) {
     res.status(404).json({errors: ["Usuário Não encontrador"]})
