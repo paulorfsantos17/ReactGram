@@ -5,7 +5,7 @@ const {Schema} = mongoose
 const photoSchema = new Schema({
   image : String,
   title: String,
-  Likes: Array,
+  likes: Array,
   comments: Array,
   userId: mongoose.ObjectId,
   userName: String
