@@ -4,11 +4,20 @@ import { Link } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 
+import {register, reset} from "../../slices/authSlices"
+import {useSelector, useDispatch} from 'react-redux'
+
+import Message from "../../components/Message/Message";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const dispath = useDispatch()
+
+  const {loading, error, success} = useSelector((state) => state.auth)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -18,9 +27,25 @@ const Register = () => {
       password,
       confirmPassword,
     };
-
-    console.log(user);
+    
+    dispath(register(user))
+  
+  
   };
+
+  useEffect(() => {
+    dispath(reset())
+  }, [dispath])
+
+  useEffect(() => {
+    if(success) {
+      setName("")
+      setEmail("")
+      setPassword("")
+      setConfirmPassword("")
+      
+    }
+  }, [success])
 
   return (
     <div id="register">
@@ -55,11 +80,14 @@ const Register = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           value={confirmPassword}
         />
-        <input type="submit" value="Cadastrar" />
+        
+        {!loading && <input type="submit" value="Cadastrar" />}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error}  type="error"/>}
+        </form>
         <p>
           Já tem conta?<Link to="/login"> Clique aqui.</Link>
         </p>
-      </form>
     </div>
   );
 };
