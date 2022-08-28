@@ -24,7 +24,6 @@ const insertPhoto = async (req, res) => {
 
   res.status(201).json(newPhoto);
 
-  res.send("Photo Insert");
 };
 
 const deletePhoto = async (req, res) => {
@@ -33,12 +32,14 @@ const deletePhoto = async (req, res) => {
 
   try {
     const photo =  await Photo.findById(mongoose.Types.ObjectId(id));
+
     if (!photo) {
       res.status(404).json({ errors: ["Foto não encontrada."] });
       return;
     }
 
     if (!photo.userId.equals(reqUser._id)) {
+      console.log(photo.userId)
       res.status(422)
         .json({ errors: ["Ocorreu um erro, por favor tente mais tarde."] });
       return;

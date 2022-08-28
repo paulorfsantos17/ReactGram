@@ -5,7 +5,7 @@ import Message from '../../components/Message/Message'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import {login, reset}  from "../../slices/authSlices"
+import {login, reset}  from "../../slices/authSlice"
 
 
 
@@ -49,10 +49,10 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)} 
           value={password}
         />
-        
-        {!loading && <input type="submit"  value="Entrar"/>}
+      {!loading && <input type="submit"  value="Login"/>}
         {loading && <input type="submit" value="Aguarde..." disabled />}
         {error && <Message msg={error}  type="error"/>}
+       
       </form>
       <p>Não tem uma conta? <Link to="/register">Clique Aqui</Link> </p>
     </div>

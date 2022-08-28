@@ -5,13 +5,13 @@ import { upload } from "../../utils/config";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { profile, resetMessage } from "../../slices/userSlice";
+import { profile, resetMessage, updateProfile } from "../../slices/userSlice";
 
 import Message from "../../components/Message/Message";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
-  const { user, messagem, error, loading } = useSelector((state) => state.user);
+  const { user, message, error, loading } = useSelector((state) => state.user);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,16 +32,58 @@ const EditProfile = () => {
     }
   }, [user])
 
-  const handleSubmit = (e) => {
-    e.preventeDefult();
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+
+    const userData = {
+      name
+    }
+
+    if(profileImage) {
+      userData.profileImage = profileImage
+    }
+
+    if(bio) {
+      userData.bio = bio
+    }
+
+    if(password) {
+      userData.password = password
+    }
+
+    const formData = new FormData()
+    
+
+    const keys = Object.keys(userData)
+    const userFormData = keys.forEach(key => formData.append(key, userData[key]))
+ 
+    
+    formData.append("user", userFormData)
+
+    await dispatch(updateProfile(formData))
+
+    setTimeout(() => {
+      dispatch(resetMessage)
+    },2000)
   };
+
+  const handleFile = (e) => {
+    const image = e.target.files[0]
+
+    setPreviewImage(image)
+    setProfileImage(image)
+  }
   return (
     <div id="edit-profile">
       <h2>Edite seus dados</h2>
       <p className="subtitle">
         Adicione uma imagem de perfil e conte mais sobre você...
       </p>
-      {/*preview da imagem*/}
+      {(user.profileImage || previewImage) && (
+        <img  className="profile-image"src={
+          previewImage ? URL.createObjectURL(previewImage) : `${upload}/users/${user.profileImage}`
+        } alt="" />
+      )}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -54,7 +96,7 @@ const EditProfile = () => {
           <span>Imagem de Perfil:</span>
           <input
             type="file"
-            onChange={(e) => setProfileImage(e.target.files)}
+            onChange={handleFile}
           />
         </label>
         <label>
@@ -74,7 +116,10 @@ const EditProfile = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <input type="submit" value="Atualizar" />
+        {!loading && <input type="submit"  value="Atualizar"/>}
+        {loading && <input type="submit" value="Aguarde..." disabled />}
+        {error && <Message msg={error}  type="error"/>}
+        {message && <Message msg={message} type="success" />}
       </form>
     </div>
   );

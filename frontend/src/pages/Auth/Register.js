@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useState, useEffect } from "react";
 
-import {register, reset} from "../../slices/authSlices"
+import {register, reset} from "../../slices/authSlice"
 import {useSelector, useDispatch} from 'react-redux'
 
 import Message from "../../components/Message/Message";
