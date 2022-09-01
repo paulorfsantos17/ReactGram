@@ -23,7 +23,7 @@ router.get("/", authGuard, getAllPhotos)
 router.get("/user/:id", authGuard,getUserPhotos )
 router.get("/search", authGuard, searchPhoto)
 router.put("/like/:id", authGuard, likePhoto)
-router.get("/:id", getPhotoById)
+router.get("/:id",  authGuard ,getPhotoById)
 router.put("/:id", authGuard,photoUpdateValidation (), validate,  updatePhoto)
 router.put("/comment/:id", authGuard,commentValidation (), validate,  commentPhoto)
 
