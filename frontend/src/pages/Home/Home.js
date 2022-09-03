@@ -13,7 +13,7 @@ const Home = () => {
 
   const dispatch = useDispatch()
   const resetMessage = useResetComponentMessage(dispatch)
-  const user = useSelector(state => state.auth)
+  const user = useSelector(state => state.auth.user)
   const {photos, loading} = useSelector(state => state.photo)
 
   useEffect(()=> {
@@ -32,17 +32,17 @@ const Home = () => {
 
 
   return (
-    <div id="home">
+    <div id='home'>
       {photos && photos.map((photo) => (
         <div key={photo._id}>
           <PhotoItem photo={photo}></PhotoItem>
           <LikeContainer photo={photo} user={user} handleLike={handleLike}></LikeContainer>
-          <Link to={`/photos/${photo._id}`}>Ver mais</Link>
+          <Link className='btn' to={`/photos/${photo._id}`}>Ver mais</Link>
         </div>
       ))}
       {photos && photos.length === 0 && (
         <h2 className="no-photos">
-          Ainda não há fotos publicadas, <Link to={`/photos/${user.user_id}`}>clique aqui</Link>
+          Ainda não há fotos publicadas, <Link  to={`/photos/${user._id}`} >clique aqui</Link>
         </h2>
       )}
     </div>

@@ -19,21 +19,36 @@ const Navbar = () => {
   const { auth } = useAuth();
   const user = useSelector((state) => state.auth.user);
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const [search, setSearch] = useState("")
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
-    dispatch(logout())
-    dispatch(reset())
+    dispatch(logout());
+    dispatch(reset());
 
-    navigate("/login")
+    navigate("/login");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+
+    if(search) {
+      return navigate(`/search?q=${search}`)
+    }
   }
   return (
     <nav id="nav">
       <Link to="/">ReactGram</Link>
-      <form id="search-form">
+      <form onSubmit={handleSearch} id="search-form">
         <BsSearch />
-        <input type="text" placeholder="Pesquisar..." />
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+        />
       </form>
       <ul id="nav-links">
         {auth ? (
@@ -50,14 +65,14 @@ const Navbar = () => {
                 </NavLink>
               </li>
             )}
-              <li>
+            <li>
               <NavLink to="/profile">
                 <BsFillPersonFill />
               </NavLink>
             </li>
             <li onClick={handleLogout}>
               <span>Sair</span>
-              </li>
+            </li>
           </>
         ) : (
           <>

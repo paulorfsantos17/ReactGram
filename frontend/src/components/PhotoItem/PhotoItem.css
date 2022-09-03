@@ -1,14 +1,15 @@
-.photo-item {
+.photo-item img {
   width: 100%;
 }
 
 #home .photo-item h2 {
-  margin-bottom: 0.2em;
+  margin-bottom: 0.5em;
 }
 
 .photo-author {
   text-align: left;
 }
-.photo-author a{
+
+.photo-author a {
   font-weight: bold;
 }

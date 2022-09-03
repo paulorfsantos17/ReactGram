@@ -71,7 +71,7 @@ const Photo = () => {
               />
               <input type="submit" value="Enviar" />
               {photo.comments.length === 0 && <p>Não há comentários... </p>}
-              {photo.comments.map(
+              {photo.comments && photo.comments.map(
                 (comment, index) =>
                   comment && (
                     <div className="comment" key={index}>
